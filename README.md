@@ -1,2 +1,2 @@
 # LS120
-LS120: Object Oriented Programming
+Launch School 120: Object Oriented Programming
