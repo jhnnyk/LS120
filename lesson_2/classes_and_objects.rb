@@ -22,13 +22,7 @@ class Person
   end
 end
 
-bob = Person.new('Robert')
-p bob.name
-p bob.first_name
-p bob.last_name
-bob.last_name = 'Smith'
-p bob.name
+bob = Person.new('Robert Smith')
+rob = Person.new('Robert Smith')
 
-bob.name = "John Adams"
-p bob.first_name
-p bob.last_name
+p bob.name == rob.name
