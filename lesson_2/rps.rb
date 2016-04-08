@@ -34,12 +34,32 @@ class Move
   end
 end
 
+class Score
+  attr_accessor :human_score, :computer_score
+
+  def initialize
+    @human_score = 0
+    @computer_score = 0
+  end
+
+  def update
+    if human.move > computer.move
+      score.human_score += 1
+    elsif human.move < computer.move
+      score.computer_score += 1
+    end
+  end
+
+  def display
+    puts "#{human.name}: #{score.human_score} | #{computer.name}: #{score.computer_score}"
+  end
+end
+
 class Player
-  attr_accessor :move, :name, :score
+  attr_accessor :move, :name
 
   def initialize
     set_name
-    @score = 0
   end
 end
 
@@ -79,11 +99,12 @@ end
 
 # Game Orchestration Engine
 class RPSGame
-  attr_accessor :human, :computer
+  attr_accessor :human, :computer, :score
 
   def initialize
     @human = Human.new
     @computer = Computer.new
+    @score = Score.new
   end
 
   def display_welcome_message
@@ -110,18 +131,6 @@ class RPSGame
     end
   end
 
-  def keep_score
-    if human.move > computer.move
-      human.score += 1
-    elsif human.move < computer.move
-      computer.score += 1
-    end
-  end
-
-  def display_score
-    puts "#{human.name}: #{human.score} | #{computer.name}: #{computer.score}"
-  end
-
   def play_again?
     answer = nil
     loop do
@@ -143,14 +152,14 @@ class RPSGame
 
   def play
     display_welcome_message
-    
+
     loop do
       human.choose
       computer.choose
       display_moves
       display_winner
-      keep_score
-      display_score
+      score.update
+      score.display
       break if human.score == 10 || computer.score == 10
     end
 
