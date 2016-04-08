@@ -135,8 +135,15 @@ class RPSGame
     return true if answer == 'y'
   end
 
+  def reset_game
+    human.score = 0
+    computer.score = 0
+    play
+  end
+
   def play
     display_welcome_message
+    
     loop do
       human.choose
       computer.choose
@@ -148,9 +155,7 @@ class RPSGame
     end
 
     if play_again?
-      human.score = 0
-      computer.score = 0
-      play
+      reset_game
     else
       display_goodbye_message
     end
