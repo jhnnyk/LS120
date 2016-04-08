@@ -88,6 +88,7 @@ class RPSGame
 
   def display_welcome_message
     puts "Welcome to Rock, Paper, Scissors!"
+    puts "---First to 10 wins!---"
   end
 
   def display_goodbye_message
@@ -143,9 +144,16 @@ class RPSGame
       display_winner
       keep_score
       display_score
-      break unless play_again?
+      break if human.score == 10 || computer.score == 10
     end
-    display_goodbye_message
+
+    if play_again?
+      human.score = 0
+      computer.score = 0
+      play
+    else
+      display_goodbye_message
+    end
   end
 end
 
