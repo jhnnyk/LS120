@@ -1,48 +1,56 @@
+require 'pry'
+
 class Move
   VALUES = ['rock', 'paper', 'scissors', 'lizard', 'spock'].freeze
 
-  def initialize(value)
-    @value = value
-  end
-
-  def scissors?
-    @value == 'scissors'
-  end
-
-  def rock?
-    @value == 'rock'
-  end
-
-  def paper?
-    @value == 'paper'
-  end
-
-  def lizard?
-    @value == 'lizard'
-  end
-
-  def spock?
-    @value == 'spock'
-  end
-
   def >(other_move)
-    (rock? && (other_move.scissors? || other_move.lizard?)) ||
-      (paper? && (other_move.rock? || other_move.spock?)) ||
-      (scissors? && (other_move.paper? || other_move.lizard?)) ||
-      (lizard? && (other_move.paper? || other_move.spock?)) ||
-      (spock? && (other_move.rock? || other_move.scissors?))
+    (is_a?(Rock) && (other_move.is_a?(Scissors) || other_move.is_a?(Lizard))) ||
+      (is_a?(Paper) && (other_move.is_a?(Rock) || other_move.is_a?(Spock))) ||
+      (is_a?(Scissors) && (other_move.is_a?(Paper) || other_move.is_a?(Lizard))) ||
+      (is_a?(Lizard) && (other_move.is_a?(Paper) || other_move.is_a?(Spock))) ||
+      (is_a?(Spock) && (other_move.is_a?(Rock) || other_move.is_a?(Scissors)))
   end
 
   def <(other_move)
-    (rock? && (other_move.paper? || other_move.spock?)) ||
-      (paper? && (other_move.scissors? || other_move.lizard?)) ||
-      (scissors? && (other_move.rock? || other_move.spock?)) ||
-      (lizard? && (other_move.rock? || other_move.scissors?)) ||
-      (spock? && (other_move.paper? || other_move.lizard?))
+    (is_a?(Rock) && (other_move.is_a?(Paper) || other_move.is_a?(Spock))) ||
+      (is_a?(Paper) && (other_move.is_a?(Scissors) || other_move.is_a?(Lizard))) ||
+      (is_a?(Scissors) && (other_move.is_a?(Rock) || other_move.is_a?(Spock))) ||
+      (is_a?(Lizard) && (other_move.is_a?(Rock) || other_move.is_a?(Scissors))) ||
+      (is_a?(Spock) && (other_move.is_a?(Paper) || other_move.is_a?(Lizard)))
   end
 
   def to_s
     @value
+  end
+end
+
+class Rock < Move
+  def initialize
+    @value = 'rock'
+  end
+end
+
+class Paper < Move
+  def initialize
+    @value = 'paper'
+  end
+end
+
+class Scissors < Move
+  def initialize
+    @value = 'scissors'
+  end
+end
+
+class Lizard < Move
+  def initialize
+    @value = 'lizard'
+  end
+end
+
+class Spock < Move
+  def initialize
+    @value = 'spock'
   end
 end
 
@@ -75,7 +83,19 @@ class Human < Player
       break if Move::VALUES.include? choice
       puts "Sorry, invalid choice."
     end
-    self.move = Move.new(choice)
+
+    self.move = case choice
+                when 'rock'
+                  Rock.new
+                when 'paper'
+                  Paper.new
+                when 'scissors'
+                  Scissors.new
+                when 'lizard'
+                  Lizard.new
+                when 'spock'
+                  Spock.new
+                end
   end
 end
 
@@ -85,7 +105,20 @@ class Computer < Player
   end
 
   def choose
-    self.move = Move.new(Move::VALUES.sample)
+    value = Move::VALUES.sample
+
+    self.move = case value
+                when 'rock'
+                  Rock.new
+                when 'paper'
+                  Paper.new
+                when 'scissors'
+                  Scissors.new
+                when 'lizard'
+                  Lizard.new
+                when 'spock'
+                  Spock.new
+                end
   end
 end
 
