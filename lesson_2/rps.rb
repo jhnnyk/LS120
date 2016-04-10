@@ -1,3 +1,5 @@
+require 'pry'
+
 class Move
   VALUES = ['rock', 'paper', 'scissors', 'lizard', 'spock'].freeze
 
@@ -47,11 +49,16 @@ class Move
 end
 
 class Player
-  attr_accessor :move, :name, :score
+  attr_accessor :move, :name, :score, :history
 
   def initialize
     set_name
     @score = 0
+    @history = []
+  end
+
+  def record_move
+    @history << self.move
   end
 end
 
@@ -76,6 +83,7 @@ class Human < Player
       puts "Sorry, invalid choice."
     end
     self.move = Move.new(choice)
+    record_move
   end
 end
 
@@ -86,6 +94,7 @@ class Computer < Player
 
   def choose
     self.move = Move.new(Move::VALUES.sample)
+    record_move
   end
 end
 
@@ -134,6 +143,17 @@ class RPSGame
     puts "#{human.name}: #{human.score} | #{computer.name}: #{computer.score}"
   end
 
+  def display_history
+    puts "---Move History---"
+    puts "--#{human.name}-- | --#{computer.name}--"
+    i = 0
+    loop do
+      puts "#{human.history[i]}  |  #{computer.history[i]}"
+      i += 1
+      break if i == human.history.size
+    end
+  end
+
   def play_again?
     answer = nil
     loop do
@@ -160,6 +180,7 @@ class RPSGame
       human.choose
       computer.choose
       display_moves
+      display_history
       display_winner
       keep_score
       display_score
