@@ -58,7 +58,7 @@ class Player
   end
 
   def record_move
-    @history << self.move
+    @history << move
   end
 end
 
@@ -154,6 +154,12 @@ class RPSGame
     end
   end
 
+  def update_display
+    display_moves
+    display_history
+    display_winner
+  end
+
   def play_again?
     answer = nil
     loop do
@@ -175,13 +181,11 @@ class RPSGame
 
   def play
     display_welcome_message
-    
+
     loop do
       human.choose
       computer.choose
-      display_moves
-      display_history
-      display_winner
+      update_display
       keep_score
       display_score
       break if human.score == 10 || computer.score == 10
