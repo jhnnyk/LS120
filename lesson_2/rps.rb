@@ -98,8 +98,26 @@ class Computer < Player
     self.name = ['R2D2', 'Hal', 'Chappie', 'Sonny', 'Number 5'].sample
   end
 
+  def analyze_moves
+    weighted_choices = []
+
+    Move::VALUES.each do |move|
+      weighted_choices << move
+    end
+
+    history.each do |move|
+      if move[1][1] > 0
+        if (move[1][0].to_f / move[1][1].to_f) > 0.6
+          weighted_choices << move[0].to_s
+        end
+      end
+    end
+
+    weighted_choices
+  end
+
   def choose
-    self.move = Move.new(Move::VALUES.sample)
+    self.move = Move.new(analyze_moves.sample)
     record_move
   end
 end
