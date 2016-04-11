@@ -116,8 +116,24 @@ class Computer < Player
     weighted_choices
   end
 
+  def set_computer_personalities
+    case name
+    when 'R2D2'
+      ['rock']
+    when 'Hal'
+      ['scissors', 'scissors', 'scissors', 'rock']
+    when 'Chappie'
+      Move::VALUES
+    when 'Sonny'
+      ['lizard', 'spock']
+    when 'Number 5'
+      ['paper', 'paper', 'scissors']
+    end
+  end
+
   def choose
-    self.move = Move.new(analyze_moves.sample)
+    # self.move = Move.new(analyze_moves.sample)
+    self.move = Move.new(set_computer_personalities.sample)
     record_move
   end
 end
