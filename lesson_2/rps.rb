@@ -54,11 +54,17 @@ class Player
   def initialize
     set_name
     @score = 0
-    @history = []
+    @history = {
+      "rock" => [0, 0],
+      "paper" => [0, 0],
+      "scissors" => [0, 0],
+      "lizard" => [0, 0],
+      "spock" => [0, 0]
+    }
   end
 
   def record_move
-    @history << move
+    @history[move.to_s][1] += 1
   end
 end
 
@@ -139,6 +145,14 @@ class RPSGame
     end
   end
 
+  def record_win
+    if human.move > computer.move
+      human.history[human.move.to_s][0] += 1
+    elsif human.move < computer.move
+      computer.history[computer.move.to_s][0] += 1
+    end
+  end
+
   def display_score
     puts "#{human.name}: #{human.score} | #{computer.name}: #{computer.score}"
   end
@@ -146,12 +160,9 @@ class RPSGame
   def display_history
     puts "---Move History---"
     puts "--#{human.name}-- | --#{computer.name}--"
-    i = 0
-    loop do
-      puts "#{human.history[i]}  |  #{computer.history[i]}"
-      i += 1
-      break if i == human.history.size
-    end
+    puts "#{human.history}"
+    puts "-----"
+    puts "#{computer.history}"
   end
 
   def update_display
@@ -185,6 +196,7 @@ class RPSGame
     loop do
       human.choose
       computer.choose
+      record_win
       update_display
       keep_score
       display_score
