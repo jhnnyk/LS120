@@ -38,6 +38,7 @@ class Board
     (1..9).each { |key| @squares[key] = Square.new }
   end
 
+  # rubocop:disable Metrics/AbcSize
   def draw
     puts "     |     |"
     puts "  #{@squares[1]}  |  #{@squares[2]}  |  #{@squares[3]}"
@@ -51,6 +52,7 @@ class Board
     puts "  #{@squares[7]}  |  #{@squares[8]}  |  #{@squares[9]}"
     puts "     |     |"
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -59,11 +61,10 @@ class Board
     return false if markers.size != 3
     markers.min == markers.max
   end
-
 end
 
 class Square
-  INITIAL_MARKER = " "
+  INITIAL_MARKER = " ".freeze
 
   attr_accessor :marker
 
@@ -93,8 +94,8 @@ class Player
 end
 
 class TTTGame
-  HUMAN_MARKER = "X"
-  COMPUTER_MARKER = "O"
+  HUMAN_MARKER = "X".freeze
+  COMPUTER_MARKER = "O".freeze
   FIRST_TO_MOVE = HUMAN_MARKER
 
   attr_reader :board, :human, :computer
