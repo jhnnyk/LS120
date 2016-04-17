@@ -131,6 +131,11 @@ class TTTGame
 
   private
 
+  def joinor(array, delimeter = ', ', word = 'or')
+    array[-1] = "#{word} #{array.last}" if array.size > 1
+    array.join(delimeter)
+  end
+
   def display_welcome_message
     puts "Welcome to Tic Tac Toe!"
     puts ""
@@ -157,7 +162,7 @@ class TTTGame
   end
 
   def human_moves
-    puts "Choose a square (#{board.unmarked_keys.join(', ')}):"
+    puts "Choose a square (#{joinor(board.unmarked_keys)}):"
     square = nil
     loop do
       square = gets.chomp.to_i
