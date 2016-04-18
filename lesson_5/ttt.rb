@@ -123,8 +123,11 @@ class TTTGame
       end
 
       keep_score
-      display_result
-      break unless play_again?
+      if @human.score >= 5 || @computer.score >= 5
+        display_result
+        break unless play_again?
+        reset_scores
+      end
       reset
       display_play_again_message
     end
@@ -150,6 +153,8 @@ class TTTGame
 
   def display_board
     puts "You're a #{human.marker}. Computer is a #{computer.marker}."
+    puts "----- Score -----"
+    puts "Human: #{@human.score}, Computer: #{@computer.score}"
     puts ""
     board.draw
     puts ""
@@ -206,8 +211,6 @@ class TTTGame
     else
       puts "It's a tie!"
     end
-
-    puts "Human: #{@human.score}, Computer: #{@computer.score}"
   end
 
   def play_again?
@@ -230,6 +233,11 @@ class TTTGame
     board.reset
     @current_marker = FIRST_TO_MOVE
     clear
+  end
+
+  def reset_scores
+    @human.score = 0
+    @computer.score = 0
   end
 
   def display_play_again_message
