@@ -1,5 +1,5 @@
 class Board
-  WINNING_LINES = [[1, 2, 3], [4, 5, 6], [6, 7, 8]] + # rows
+  WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                   [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                   [[1, 5, 9], [3, 5, 7]]              # diagonals
 
@@ -64,7 +64,7 @@ class Board
 end
 
 class Square
-  INITIAL_MARKER = " ".freeze
+  INITIAL_MARKER = " "
 
   attr_accessor :marker
 
@@ -87,17 +87,15 @@ end
 
 class Player
   attr_reader :marker
-  attr_accessor :score
 
   def initialize(marker)
     @marker = marker
-    @score = 0
   end
 end
 
 class TTTGame
-  HUMAN_MARKER = "X".freeze
-  COMPUTER_MARKER = "O".freeze
+  HUMAN_MARKER = "X"
+  COMPUTER_MARKER = "O"
   FIRST_TO_MOVE = HUMAN_MARKER
 
   attr_reader :board, :human, :computer
@@ -119,10 +117,9 @@ class TTTGame
       loop do
         current_player_moves
         break if board.someone_won? || board.full?
-        clear_screen_and_display_board if human_turn?
+        clear_screen_and_display_board
       end
 
-      keep_score
       display_result
       break unless play_again?
       reset
@@ -133,11 +130,6 @@ class TTTGame
   end
 
   private
-
-  def joinor(array, delimeter = ', ', word = 'or')
-    array[-1] = "#{word} #{array.last}" if array.size > 1
-    array.join(delimeter)
-  end
 
   def display_welcome_message
     puts "Welcome to Tic Tac Toe!"
@@ -153,10 +145,6 @@ class TTTGame
     display_board
   end
 
-  def human_turn?
-    @current_marker == HUMAN_MARKER
-  end
-
   def display_board
     puts "You're a #{human.marker}. Computer is a #{computer.marker}."
     puts ""
@@ -165,7 +153,7 @@ class TTTGame
   end
 
   def human_moves
-    puts "Choose a square (#{joinor(board.unmarked_keys)}):"
+    puts "Choose a square (#{board.unmarked_keys.join(', ')}): "
     square = nil
     loop do
       square = gets.chomp.to_i
@@ -181,21 +169,12 @@ class TTTGame
   end
 
   def current_player_moves
-    if human_turn?
+    if @current_marker == HUMAN_MARKER
       human_moves
       @current_marker = COMPUTER_MARKER
     else
       computer_moves
       @current_marker = HUMAN_MARKER
-    end
-  end
-
-  def keep_score
-    case board.winning_marker
-    when human.marker
-      human.score += 1
-    when computer.marker
-      computer.score += 1
     end
   end
 
@@ -210,7 +189,6 @@ class TTTGame
     else
       puts "It's a tie!"
     end
-    puts "Human: #{human.score}, Computer: #{computer.score}"
   end
 
   def play_again?
@@ -226,7 +204,7 @@ class TTTGame
   end
 
   def clear
-    system 'clear'
+    system "clear"
   end
 
   def reset
