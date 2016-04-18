@@ -87,9 +87,11 @@ end
 
 class Player
   attr_reader :marker
+  attr_accessor :score
 
   def initialize(marker)
     @marker = marker
+    @score = 0
   end
 end
 
@@ -120,6 +122,7 @@ class TTTGame
         clear_screen_and_display_board
       end
 
+      keep_score
       display_result
       break unless play_again?
       reset
@@ -183,6 +186,15 @@ class TTTGame
     end
   end
 
+  def keep_score
+    case board.winning_marker
+    when human.marker
+      @human.score += 1
+    when computer.marker
+      @computer.score +=1
+    end
+  end
+
   def display_result
     clear_screen_and_display_board
 
@@ -194,6 +206,8 @@ class TTTGame
     else
       puts "It's a tie!"
     end
+
+    puts "Human: #{@human.score}, Computer: #{@computer.score}"
   end
 
   def play_again?
