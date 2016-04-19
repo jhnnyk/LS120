@@ -123,13 +123,15 @@ class TTTGame
       end
 
       keep_score
+      display_result
       if @human.score >= 5 || @computer.score >= 5
-        display_result
         break unless play_again?
         reset_scores
+        reset
+        display_play_again_message
+      else
+        play_again?("continue") ? reset : break
       end
-      reset
-      display_play_again_message
     end
 
     display_goodbye_message
@@ -139,6 +141,7 @@ class TTTGame
 
   def display_welcome_message
     puts "Welcome to Tic Tac Toe!"
+    puts "-- First to 5 wins! --"
     puts ""
   end
 
@@ -213,10 +216,10 @@ class TTTGame
     end
   end
 
-  def play_again?
+  def play_again?(msg = "play again")
     answer = nil
     loop do
-      puts "Would you like to play again? (y/n)"
+      puts "Would you like to #{msg}? (y/n)"
       answer = gets.chomp.downcase
       break if %w(y n).include? answer
       puts "Sorry, must be y or n"
