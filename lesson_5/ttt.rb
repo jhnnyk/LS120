@@ -57,7 +57,7 @@ class Board
       end
 
       if human_marker_count == 2 && empty_squares.size == 1
-        return empty_squares.first[0]
+        return empty_squares.keys.first
       end
     end
     nil
