@@ -1,3 +1,5 @@
+require 'pry'
+
 class Board
   WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                   [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
@@ -36,6 +38,26 @@ class Board
 
   def reset
     (1..9).each { |key| @squares[key] = Square.new }
+  end
+
+  def human_threat?
+    !!defend
+  end
+
+  def defend
+    WINNING_LINES.each do |line|
+      squares_line = @squares.select { |k, v| line.include?(k) }
+      human_marker_count = squares_line.count { |k, v| v.marker == TTTGame::HUMAN_MARKER}
+
+      empty_squares = squares_line.select do |k, v|
+        v.marker == Square::INITIAL_MARKER
+      end
+
+      if human_marker_count == 2 && empty_squares.size == 1
+        empty_squares.keys.each { |key| return key }
+      end
+    end
+    nil
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -181,7 +203,11 @@ class TTTGame
   end
 
   def computer_moves
-    board[board.unmarked_keys.sample] = computer.marker
+    if board.human_threat?
+      board[board.defend] = computer.marker
+    else
+      board[board.unmarked_keys.sample] = computer.marker
+    end
   end
 
   def current_player_moves
