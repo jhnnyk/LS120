@@ -63,6 +63,29 @@ class Board
     nil
   end
 
+  def computer_threat?
+    !!attack
+  end
+
+  def attack
+    WINNING_LINES.each do |line|
+      squares_line = @squares.select { |k, v| line.include?(k) }
+
+      computer_marker_count = squares_line.count do |k, v|
+        v.marker == TTTGame::COMPUTER_MARKER
+      end
+
+      empty_squares = squares_line.select do |k, v|
+        v.marker == Square::INITIAL_MARKER
+      end
+
+      if computer_marker_count == 2 && empty_squares.size == 1
+        return empty_squares.keys.first
+      end
+    end
+    nil
+  end
+
   # rubocop:disable Metrics/AbcSize
   def draw
     puts "     |     |"
@@ -206,7 +229,9 @@ class TTTGame
   end
 
   def computer_moves
-    if board.human_threat?
+    if board.computer_threat?
+      board[board.attack] = computer.marker
+    elsif board.human_threat?
       board[board.defend] = computer.marker
     else
       board[board.unmarked_keys.sample] = computer.marker
