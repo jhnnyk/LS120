@@ -47,14 +47,17 @@ class Board
   def defend
     WINNING_LINES.each do |line|
       squares_line = @squares.select { |k, v| line.include?(k) }
-      human_marker_count = squares_line.count { |k, v| v.marker == TTTGame::HUMAN_MARKER}
+
+      human_marker_count = squares_line.count do |k, v|
+        v.marker == TTTGame::HUMAN_MARKER
+      end
 
       empty_squares = squares_line.select do |k, v|
         v.marker == Square::INITIAL_MARKER
       end
 
       if human_marker_count == 2 && empty_squares.size == 1
-        empty_squares.keys.each { |key| return key }
+        return empty_squares.first[0]
       end
     end
     nil
