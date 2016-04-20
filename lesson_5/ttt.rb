@@ -10,6 +10,10 @@ class Board
     reset
   end
 
+  def [](num)
+    @squares[num].marker
+  end
+
   def []=(num, marker)
     @squares[num].marker = marker
   end
@@ -233,6 +237,8 @@ class TTTGame
       board[board.attack] = computer.marker
     elsif board.human_threat?
       board[board.defend] = computer.marker
+    elsif board[5] == " "
+      board[5] = computer.marker
     else
       board[board.unmarked_keys.sample] = computer.marker
     end
