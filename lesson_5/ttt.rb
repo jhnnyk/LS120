@@ -150,7 +150,6 @@ end
 class TTTGame
   HUMAN_MARKER = "X"
   COMPUTER_MARKER = "O"
-  FIRST_TO_MOVE = HUMAN_MARKER
 
   attr_reader :board, :human, :computer
 
@@ -158,7 +157,7 @@ class TTTGame
     @board = Board.new
     @human = Player.new(HUMAN_MARKER)
     @computer = Player.new(COMPUTER_MARKER)
-    @current_marker = FIRST_TO_MOVE
+    @current_marker = nil
   end
 
   def play
@@ -166,6 +165,7 @@ class TTTGame
     display_welcome_message
 
     loop do
+      decide_who_goes_first
       display_board
 
       loop do
@@ -199,6 +199,22 @@ class TTTGame
 
   def display_goodbye_message
     puts "Thanks for playing Tic Tac Toe! Goodbye!"
+  end
+
+  def decide_who_goes_first
+    puts "Who goes first: Person or Computer?"
+    answer = nil
+    loop do
+      answer = gets.chomp.downcase
+      break if %w(person computer).include? answer
+      puts "Sorry, answer must be 'person' or 'computer'."
+    end
+
+    if answer == 'person'
+      @current_marker = HUMAN_MARKER
+    elsif answer == 'computer'
+      @current_marker = COMPUTER_MARKER
+    end
   end
 
   def clear_screen_and_display_board
@@ -294,7 +310,6 @@ class TTTGame
 
   def reset
     board.reset
-    @current_marker = FIRST_TO_MOVE
     clear
   end
 
